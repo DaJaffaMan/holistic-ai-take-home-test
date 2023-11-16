@@ -18,21 +18,10 @@ export default function CreateProjectDetailsRoute() {
   return (
     <div className="max-w-2xl">
       <Form className="flex flex-col gap-4 max-w-2xl" method="post" id="project-form">
-        <div className="flex flex-col gap-4">
-          <div>
-            <Label className="text-base">Project Details</Label>
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="name" className="font-normal"></Label>
-            <Input required id="project-name" name="project-name" />
-          </div>
-        </div>
-
         {projectDetails ? (
           <div className="flex flex-col gap-2">
-            <Label className="font-normal" htmlFor="summary">
-              Summary
+            <Label className="font-normal" htmlFor="details">
+              Details
             </Label>
             <Text>{projectDetails.details}</Text>
           </div>

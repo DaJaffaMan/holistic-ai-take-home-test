@@ -4,7 +4,7 @@ import { db } from "../../drizzle";
 
 export const projectDetails = pgTable("projectDetails", {
   id: serial("id").primaryKey(),
-  projectId: integer("author_id").references(() => project.id),
+  projectId: integer("projectId").references(() => project.id),
   details: varchar("details", { length: 2000 }),
 });
 
