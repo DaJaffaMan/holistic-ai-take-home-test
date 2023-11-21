@@ -1,4 +1,4 @@
-import { pgTable, serial, varchar } from "drizzle-orm/pg-core";
+import { integer, pgTable, serial, varchar } from "drizzle-orm/pg-core";
 
 export const project = pgTable("project", {
   id: serial("id").primaryKey(),
@@ -10,3 +10,13 @@ export const project = pgTable("project", {
 export type Project = typeof project.$inferInsert;
 
 export type NewProject = typeof project.$inferInsert;
+
+export const projectDetails = pgTable("projectDetails", {
+  id: serial("id").primaryKey(),
+  projectId: integer("projectId").references(() => project.id),
+  details: varchar("details", { length: 2000 }),
+});
+
+export type ProjecDetails = typeof projectDetails.$inferSelect;
+
+export type NewProjecDetails = typeof projectDetails.$inferInsert;

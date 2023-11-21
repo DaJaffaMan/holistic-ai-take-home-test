@@ -1,18 +1,6 @@
-import { integer, pgTable, serial, varchar } from "drizzle-orm/pg-core";
-import { project } from "./project.sql";
 import { db } from "../../drizzle";
 
-export const projectDetails = pgTable("projectDetails", {
-  id: serial("id").primaryKey(),
-  projectId: integer("projectId").references(() => project.id),
-  details: varchar("details", { length: 2000 }),
-});
-
 export async function fetchProjectDetails(projectId: number) {
-  return await db.query.projectDetails.findOne({
-    where: { projectId },
-  });
+  // return await db.query.projectDetails.findFirst({
+  // });
 }
-export type ProjecDetails = typeof projectDetails.$inferSelect;
-
-export type NewProjecDetails = typeof projectDetails.$inferInsert;

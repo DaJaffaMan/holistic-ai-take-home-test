@@ -7,8 +7,5 @@ export async function listProjects() {
 }
 
 export async function createProject(newProject: NewProject) {
-  return await db
-    .insert(project)
-    .values(newProject)
-    .returning({ id: project.id });
+  return await db.insert(project).values(newProject).returning({ id: project.id });
 }
