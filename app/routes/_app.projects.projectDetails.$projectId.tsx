@@ -4,7 +4,7 @@ import { Text } from "lucide-react";
 import { useState } from "react";
 import { Label } from "~/components/ui/label";
 import type { ProjecDetails } from "../../models/project/project.sql";
-import { fetchProjectDetails } from "../../models/project/project.sql";
+import { fetchProjectDetails } from "../../models/project/project.details.sql";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   return await fetchProjectDetails(Number(params));

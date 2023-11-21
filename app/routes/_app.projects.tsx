@@ -31,6 +31,23 @@ export default function Projects() {
 
 const columns: ColumnDef<Project>[] = [
   {
+    accessorKey: "id",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Name" />
+    ),
+    cell: ({ row }) => {
+      return (
+        <div className="flex space-x-2">
+          <span className="max-w-[500px] truncate font-medium">
+            <Link className="text-blue-500 underline" to={`projectDetails/${row.getValue("id")}`}>
+              {row.getValue("id")}
+            </Link>
+          </span>
+        </div>
+      );
+    },
+  },
+  {
     accessorKey: "name",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Name" />
@@ -39,7 +56,7 @@ const columns: ColumnDef<Project>[] = [
       return (
         <div className="flex space-x-2">
           <span className="max-w-[500px] truncate font-medium">
-            <Link className="text-blue-500 underline" to={row.getValue("name")}>
+            <Link className="text-blue-500 underline" to={`projectDetails/${row.getValue("name")}`}>
               {row.getValue("name")}
             </Link>
           </span>
