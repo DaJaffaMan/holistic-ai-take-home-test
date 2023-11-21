@@ -11,11 +11,6 @@ export function StorageStack({ stack }: StackContext) {
   const summarizerFunction = new Function(stack, "SummarizerFunction", {
     handler: "scripts/summary.py",
     runtime: "python3.9",
-    environment: {
-      DB_NAME: "companycrmdb",
-      DB_USER: "postgres",
-      DB_PASSWORD: "postgres",
-    },
   });
 
   const bucket = new Bucket(stack, "Bucket", {
@@ -44,7 +39,7 @@ export function StorageStack({ stack }: StackContext) {
     },
   });
 
-  summarizerFunction.attachPermissions(["s3"]);
+  summarizerFunction.attachPermissions(["s3", "rds-data"]);
 
   return { database, bucket };
 }

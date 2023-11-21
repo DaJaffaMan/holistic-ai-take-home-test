@@ -7,7 +7,7 @@ import type { ProjecDetails } from "../../models/project/project.sql";
 import { fetchProjectDetails } from "../../models/project/project.details.sql";
 
 export async function loader({ params }: LoaderFunctionArgs) {
-  return await fetchProjectDetails(Number(params));
+  return await fetchProjectDetails(Number(params.projectId));
 }
 
 export default function CreateProjectDetailsRoute() {
