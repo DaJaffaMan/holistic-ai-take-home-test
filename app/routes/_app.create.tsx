@@ -76,7 +76,7 @@ export default function CreateProjectRoute() {
 
           <div className="flex flex-col gap-2">
             <Label htmlFor="name" className="font-normal">
-              Nama
+              Name
             </Label>
             <Input required id="name" name="name" />
           </div>
