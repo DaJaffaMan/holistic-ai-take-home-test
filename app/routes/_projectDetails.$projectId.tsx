@@ -1,11 +1,10 @@
-import { Form, useLoaderData } from "@remix-run/react";
-import { useState } from "react";
-import { Input } from "~/components/ui/input";
-import { Label } from "~/components/ui/label";
-import { fetchProjectDetails } from "../../models/project/project.details.sql";
-import type { ProjecDetails } from "../../models/project/project.details.sql";
 import type { LoaderFunctionArgs } from "@remix-run/node";
+import { Form, useLoaderData } from "@remix-run/react";
 import { Text } from "lucide-react";
+import { useState } from "react";
+import { Label } from "~/components/ui/label";
+import type { ProjecDetails } from "../../models/project/project.sql";
+import { fetchProjectDetails } from "../../models/project/project.sql";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   return await fetchProjectDetails(Number(params));

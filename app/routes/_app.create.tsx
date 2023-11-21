@@ -11,19 +11,25 @@ import Uppy from "@uppy/core";
 import { Dashboard } from "@uppy/react";
 import { useState } from "react";
 import { XIcon } from "lucide-react";
-import { Textarea } from "~/components/ui/textarea";
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
 
   const name = formData.get("name");
   const filename = formData.get("filename");
-  const summary = formData.get("summary")?.toString();
 
   invariant(typeof name === "string", "name is required");
   invariant(typeof filename === "string", "filename is required");
 
-  await createProject({ name, filename, summary });
+  const createdProjectId = await createProject({ name, filename });
+
+  await fetch("https://d7qe7ky466.execute-api.us-east-1.amazonaws.com", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ projectId: createdProjectId, filename }),
+  });
 
   return redirect("/projects");
 }
@@ -62,11 +68,7 @@ export default function CreateProjectRoute() {
 
   return (
     <div className="max-w-2xl">
-      <Form
-        className="flex flex-col gap-4 max-w-2xl"
-        method="post"
-        id="project-form"
-      >
+      <Form className="flex flex-col gap-4 max-w-2xl" method="post" id="project-form">
         <div className="flex flex-col gap-4">
           <div>
             <Label className="text-base">Create new project</Label>
@@ -74,7 +76,7 @@ export default function CreateProjectRoute() {
 
           <div className="flex flex-col gap-2">
             <Label htmlFor="name" className="font-normal">
-              Name
+              Nama
             </Label>
             <Input required id="name" name="name" />
           </div>
@@ -86,31 +88,14 @@ export default function CreateProjectRoute() {
           <div className="flex flex-col gap-2">
             <Label className="font-normal">Filename</Label>
             <div>
-              <input
-                required
-                readOnly
-                type="text"
-                value={filename}
-                name="filename"
-              />
-              <Button
-                variant="ghost"
-                onClick={() => setFilename("")}
-                className="h-8 px-2 lg:px-3"
-              >
+              <input required readOnly type="text" value={filename} name="filename" />
+              <Button variant="ghost" onClick={() => setFilename("")} className="h-8 px-2 lg:px-3">
                 Clear
                 <XIcon className="ml-2 h-4 w-4" />
               </Button>
             </div>
           </div>
         ) : null}
-
-        <div className="flex flex-col gap-2">
-          <Label className="font-normal" htmlFor="summary">
-            Summary
-          </Label>
-          <Textarea id="summary" name="summary" />
-        </div>
         <div>
           <Button type="submit">Submit</Button>
         </div>

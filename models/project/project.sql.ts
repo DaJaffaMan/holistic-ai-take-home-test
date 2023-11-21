@@ -1,4 +1,5 @@
 import { integer, pgTable, serial, varchar } from "drizzle-orm/pg-core";
+import { db } from "../../drizzle";
 
 export const project = pgTable("project", {
   id: serial("id").primaryKey(),
@@ -16,6 +17,7 @@ export const projectDetails = pgTable("projectDetails", {
   projectId: integer("projectId").references(() => project.id),
   details: varchar("details", { length: 2000 }),
 });
+
 
 export type ProjecDetails = typeof projectDetails.$inferSelect;
 
