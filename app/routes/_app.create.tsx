@@ -4,7 +4,7 @@ import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import invariant from "tiny-invariant";
-import { createProject } from "@/models/project";
+import { createProject, updateProjectSummary } from "@/models/project";
 import AwsS3 from "@uppy/aws-s3";
 import type { UppyFile } from "@uppy/core";
 import Uppy from "@uppy/core";
@@ -21,9 +21,15 @@ export async function action({ request }: ActionFunctionArgs) {
   invariant(typeof name === "string", "name is required");
   invariant(typeof filename === "string", "filename is required");
 
+  // Create a new project
   const createdProjectId = await createProject({ name, filename });
 
-  await fetch("https://d7qe7ky466.execute-api.us-east-1.amazonaws.com", {
+  if (!createdProjectId) {
+    throw new Error("Failed to create project");
+  }
+
+  // Fetch the summary for the uploaded file
+  const summaryResponse = await fetch("https://d7qe7ky466.execute-api.us-east-1.amazonaws.com/summarize", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -31,8 +37,17 @@ export async function action({ request }: ActionFunctionArgs) {
     body: JSON.stringify({ projectId: createdProjectId, filename }),
   });
 
+  const summaryResult = await summaryResponse.json();
+
+  console.log(summaryResponse);
+  console.log(summaryResult);
+
+  // Update the project with the summary
+  await updateProjectSummary({ id: Number(createdProjectId), name, filename, summary: summaryResult.summary });
+
   return redirect("/projects");
 }
+
 const uppy = new Uppy().use(AwsS3);
 
 export default function CreateProjectRoute() {

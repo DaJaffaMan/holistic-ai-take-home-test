@@ -8,12 +8,13 @@ export function StorageStack({ stack }: StackContext) {
     scaling: { autoPause: false, minCapacity: "ACU_8", maxCapacity: "ACU_64" },
   });
 
-  const summarizerFunction = new Function(stack, "SummarizerFunction", {
+  const summarizer = new Function(stack, "SummarizerFunction", {
     handler: "scripts/summary.py",
     runtime: "python3.9",
   });
 
   const bucket = new Bucket(stack, "Bucket", {
+    name: "holisticaicodetestjj",
     cors: [
       {
         allowedHeaders: ["*"],
@@ -34,12 +35,12 @@ export function StorageStack({ stack }: StackContext) {
     },
     notifications: {
       fileUploaded: {
-        function: summarizerFunction,
+        function: summarizer,
       },
     },
   });
 
-  summarizerFunction.attachPermissions(["s3", "rds-data"]);
+  summarizer.attachPermissions(["s3"]);
 
-  return { database, bucket };
+  return { database, bucket, summarizer };
 }
