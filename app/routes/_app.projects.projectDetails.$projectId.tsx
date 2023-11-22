@@ -3,16 +3,20 @@ import { Form, useLoaderData } from "@remix-run/react";
 import { Text } from "lucide-react";
 import { useState } from "react";
 import { Label } from "~/components/ui/label";
-import type { ProjecDetails } from "../../models/project/project.sql";
-import { fetchProjectDetails } from "../../models/project/project.details.sql";
+import { fetchProjectDetails } from "../../models/project";
+import type { ProjectDetails } from "../../models/project/projectDetails.sql";
 
 export async function loader({ params }: LoaderFunctionArgs) {
-  return await fetchProjectDetails(Number(params.projectId));
+  const response = await fetchProjectDetails(Number(params.projectId));
+
+  console.log(response)
+
+  return response;
 }
 
 export default function CreateProjectDetailsRoute() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [projectDetails, _setProjectDetails] = useState<ProjecDetails>(useLoaderData<typeof loader>());
+  const [projectDetails, _setProjectDetails] = useState<ProjectDetails>(useLoaderData<typeof loader>());
 
   return (
     <div className="max-w-2xl">
