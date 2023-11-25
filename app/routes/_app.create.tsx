@@ -28,8 +28,7 @@ export async function action({ request }: ActionFunctionArgs) {
     throw new Error("Failed to create project");
   }
 
-  // Fetch the summary for the uploaded file
-  const summaryResponse = await fetch("https://d7qe7ky466.execute-api.us-east-1.amazonaws.com/summarize", {
+  const summaryResponse = await fetch("https://v47ilm5z70.execute-api.us-east-1.amazonaws.com/summarize", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -37,12 +36,16 @@ export async function action({ request }: ActionFunctionArgs) {
     body: JSON.stringify({ projectId: createdProjectId, filename }),
   });
 
+  if (!summaryResponse.ok) {
+    const errorText = await summaryResponse.text();
+    console.error("Error fetching summary:", errorText);
+    throw new Error(`Failed to fetch summary: ${summaryResponse.status}`);
+  }
+
   const summaryResult = await summaryResponse.json();
 
-  console.log(summaryResponse);
   console.log(summaryResult);
 
-  // Update the project with the summary
   await updateProjectSummary({ id: Number(createdProjectId), name, filename, summary: summaryResult.summary });
 
   return redirect("/projects");

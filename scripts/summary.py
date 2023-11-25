@@ -16,7 +16,7 @@ def handler(event, context):
     project_id = body['projectId']
     key = body['filename']
     
-    bucket = "holisticaicodetestjj"  # Replace with your S3 bucket name
+    bucket = "holisticaicodetestjj"
     file_path = '/tmp/' + key
 
     # Download file from S3
